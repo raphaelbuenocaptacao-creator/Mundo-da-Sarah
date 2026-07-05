@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mundo da Sarah — Desenhar e Pintar</title>
+  <style>
+    :root{
+      --bg1:#ffd6ec;
+      --bg2:#d7efff;
+      --bg3:#fff4b8;
+      --card:#ffffffee;
+      --ink:#28213a;
+      --pink:#ff5db1;
+      --purple:#8b5cf6;
+      --blue:#38bdf8;
+      --yellow:#facc15;
+      --green:#34d399;
+      --shadow:0 18px 50px rgba(42,33,58,.18);
+      --radius:24px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}
+    body{
+      min-height:100vh;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at 10% 10%, #fff 0 3%, transparent 4%),
+        radial-gradient(circle at 85% 12%, #fff 0 2%, transparent 3%),
+        linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3));
+      overflow-x:hidden;
+    }
+    .app{width:min(1240px,100%);margin:auto;padding:16px}
+    header{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      background:var(--card);border-radius:var(--radius);padding:14px 16px;
+      box-shadow:var(--shadow);position:sticky;top:8px;z-index:10;
+      backdrop-filter:blur(12px);
+    }
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{
+      width:58px;height:58px;border-radius:20px;
+      background:linear-gradient(135deg,var(--pink),var(--purple),var(--blue));
+      display:grid;place-items:center;color:#fff;font-size:31px;font-weight:900;
+      box-shadow:0 10px 25px rgba(139,92,246,.35);
+    }
+    h1{font-size:clamp(22px,3.4vw,38px);line-height:1}
+    .subtitle{font-size:13px;color:#685d7c;margin-top:5px}
+    .pill{
+      border:0;border-radius:999px;padding:11px 14px;font-weight:800;
+      background:#fff;color:var(--ink);box-shadow:0 8px 18px rgba(0,0,0,.08);
+      cursor:pointer;transition:.2s;white-space:nowrap;
+    }
+    .pill:hover{transform:translateY(-2px)}
+    .main{
+      display:grid;grid-template-columns:310px 1fr 300px;gap:16px;margin-top:16px;
+    }
+    .panel{
+      background:var(--card);border-radius:var(--radius);padding:14px;
+      box-shadow:var(--shadow);backdrop-filter:blur(12px);
+    }
+    .panel h2{font-size:18px;margin-bottom:10px}
+    .section{margin-bottom:16px}
+    .buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    button{
+      border:0;border-radius:16px;padding:12px;font-weight:900;
+      cursor:pointer;background:#fff;box-shadow:0 7px 16px rgba(0,0,0,.08);
+      color:var(--ink);transition:.15s;
+    }
+    button:hover{transform:translateY(-1px)}
+    button.active{outline:4px solid #ffffff;box-shadow:0 0 0 4px var(--purple),0 8px 16px rgba(0,0,0,.12)}
+    .big{grid-column:1/-1}
+    .draw-wrap{
+      min-height:720px;background:linear-gradient(180deg,#ffffffcc,#fef7ffcc);
+      border-radius:var(--radius);padding:12px;box-shadow:var(--shadow);
+      display:flex;flex-direction:column;gap:10px;
+    }
+    .topbar{
+      display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap
+    }
+    .mood{
+      flex:1;min-width:220px;background:#fff;border-radius:18px;padding:12px;
+      font-weight:900;text-align:center;color:#5b21b6;
+      box-shadow:0 8px 18px rgba(0,0,0,.07)
+    }
+    .canvas-box{
+      position:relative;flex:1;min-height:610px;border-radius:22px;overflow:hidden;
+      background:#fff;border:5px solid #fff;box-shadow:inset 0 0 0 2px #eee;
+      touch-action:none;
+    }
+    canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none}
+    #templateCanvas{z-index:1;background:#fff}
+    #drawCanvas{z-index:2}
+    .colors{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+    .color{
+      height:42px;border-radius:14px;border:4px solid #fff;box-shadow:0 7px 12px rgba(0,0,0,.12);
+      cursor:pointer;
+    }
+    .color.active{outline:4px solid var(--ink)}
+    input[type="color"]{width:100%;height:46px;border:0;background:transparent;cursor:pointer}
+    input[type="range"]{width:100%}
+    .templates{display:grid;grid-template-columns:1fr;gap:8px;max-height:360px;overflow:auto;padding-right:4px}
+    .template{
+      text-align:left;display:flex;align-items:center;gap:10px;background:#fff
+    }
+    .emoji{font-size:26px;width:34px;text-align:center}
+    .small{font-size:12px;color:#756989;font-weight:700;margin-top:3px}
+    .gallery{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .shot{background:#fff;border-radius:16px;padding:6px;box-shadow:0 7px 16px rgba(0,0,0,.08)}
+    .shot img{width:100%;border-radius:12px;display:block}
+    .shot button{width:100%;font-size:12px;padding:8px;margin-top:5px}
+    .footer-note{
+      margin-top:12px;text-align:center;font-size:12px;color:#716583;font-weight:700;
+    }
+    .sparkle{
+      position:fixed;pointer-events:none;font-size:24px;animation:pop .8s ease-out forwards;z-index:99
+    }
+    @keyframes pop{
+      from{transform:scale(.3) translateY(0);opacity:1}
+      to{transform:scale(1.8) translateY(-45px);opacity:0}
+    }
+    @media(max-width:980px){
+      .main{grid-template-columns:1fr}
+      .draw-wrap{min-height:650px}
+      .canvas-box{min-height:520px}
+      header{position:relative;top:0;flex-direction:column;text-align:center}
+      .buttons{grid-template-columns:1fr 1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="brand">
+        <div class="logo">S</div>
+        <div>
+          <h1>Mundo da Sarah</h1>
+          <div class="subtitle">Desenhar, pintar, imaginar e criar emoções boas 💖</div>
+        </div>
+      </div>
+      <button class="pill" onclick="speakJoy()">✨ Mensagem feliz</button>
+    </header>
+
+    <main class="main">
+      <aside class="panel">
+        <div class="section">
+          <h2>🎨 Ferramentas</h2>
+          <div class="buttons">
+            <button id="toolBrush" class="active" onclick="setTool('brush')">Pincel</button>
+            <button id="toolEraser" onclick="setTool('eraser')">Borracha</button>
+            <button onclick="fillBackground()">Fundo</button>
+            <button onclick="addSticker()">Figurinha</button>
+            <button onclick="undo()">Voltar</button>
+            <button onclick="clearDrawing()">Limpar</button>
+            <button class="big" onclick="saveArt()">💾 Salvar desenho</button>
+            <button class="big" onclick="downloadArt()">⬇️ Baixar imagem</button>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>🌈 Cores</h2>
+          <div class="colors" id="colors"></div>
+          <input type="color" id="customColor" value="#ff5db1" onchange="pickColor(this.value)">
+        </div>
+
+        <div class="section">
+          <h2>🖌️ Tamanho</h2>
+          <input type="range" id="size" min="2" max="55" value="12">
+          <div class="small">Pincel atual: <span id="sizeLabel">12</span></div>
+        </div>
+
+        <div class="section">
+          <h2>😊 Emoção do desenho</h2>
+          <div class="buttons">
+            <button onclick="setMood('Alegria')">Alegria</button>
+            <button onclick="setMood('Coragem')">Coragem</button>
+            <button onclick="setMood('Calma')">Calma</button>
+            <button onclick="setMood('Magia')">Magia</button>
+          </div>
+        </div>
+      </aside>
+
+      <section class="draw-wrap">
+        <div class="topbar">
+          <div class="mood" id="moodText">Hoje a Sarah vai criar uma arte cheia de alegria ✨</div>
+          <button class="pill" onclick="randomTemplate()">🎲 Surpresa</button>
+        </div>
+        <div class="canvas-box" id="canvasBox">
+          <canvas id="templateCanvas"></canvas>
+          <canvas id="drawCanvas"></canvas>
+        </div>
+      </section>
+
+      <aside class="panel">
+        <div class="section">
+          <h2>🖼️ Escolha um desenho</h2>
+          <div class="templates" id="templates"></div>
+        </div>
+        <div class="section">
+          <h2>💝 Galeria da Sarah</h2>
+          <div class="gallery" id="gallery"></div>
+        </div>
+      </aside>
+    </main>
+
+    <div class="footer-note">
+      Feito para brincar online no GitHub Pages. Não usa imagens oficiais; os moldes são criações originais inspiradas em mundos mágicos.
+    </div>
+  </div>
+
+<script>
+const tCanvas = document.getElementById('templateCanvas');
+const dCanvas = document.getElementById('drawCanvas');
+const box = document.getElementById('canvasBox');
+const tctx = tCanvas.getContext('2d');
+const dctx = dCanvas.getContext('2d');
+
+let drawing=false, lastX=0, lastY=0, tool='brush', color='#ff5db1', history=[], mood='Alegria';
+
+const palette = ['#ff5db1','#8b5cf6','#38bdf8','#34d399','#facc15','#fb923c','#ef4444','#111827','#ffffff','#a855f7','#06b6d4','#84cc16'];
+const templates = [
+  {id:'princesa-gelo', emoji:'❄️', title:'Princesa do Gelo', desc:'castelo, neve e vestido mágico'},
+  {id:'boneca-sombria', emoji:'🖤', title:'Menina Sombria Divertida', desc:'tranças, coração e mistério fofo'},
+  {id:'rainha-cartas', emoji:'♦️', title:'Rainha das Cartas', desc:'fantasia colorida e divertida'},
+  {id:'danca-pop', emoji:'🎤', title:'Rei da Dança Pop', desc:'chapéu, luva brilhante e palco'},
+  {id:'guerreira-kpop', emoji:'⚔️', title:'Guerreira K-pop', desc:'microfone, espada de luz e estrelas'},
+  {id:'sereia', emoji:'🧜‍♀️', title:'Sereia Arco-íris', desc:'mar, conchas e cabelo mágico'},
+  {id:'unicornios', emoji:'🦄', title:'Unicórnio Feliz', desc:'nuvens, coração e arco-íris'},
+  {id:'dragao-fofo', emoji:'🐉', title:'Dragão Fofo', desc:'asas pequenas e fogo de coração'},
+  {id:'castelo', emoji:'🏰', title:'Castelo Encantado', desc:'torres, bandeiras e caminho mágico'}
+];
+
+function resize(){
+  const rect = box.getBoundingClientRect();
+  const saved = dctx.getImageData(0,0,dCanvas.width||1,dCanvas.height||1);
+  tCanvas.width = dCanvas.width = Math.floor(rect.width);
+  tCanvas.height = dCanvas.height = Math.floor(rect.height);
+  dctx.lineCap='round'; dctx.lineJoin='round';
+  drawTemplate(currentTemplate || 'princesa-gelo');
+}
+let currentTemplate='princesa-gelo';
+window.addEventListener('resize', resize);
+
+function init(){
+  document.getElementById('colors').innerHTML = palette.map((c,i)=>`<div class="color ${i===0?'active':''}" style="background:${c}" onclick="pickColor('${c}', this)"></div>`).join('');
+  document.getElementById('templates').innerHTML = templates.map(t=>`
+    <button class="template" onclick="drawTemplate('${t.id}')">
+      <span class="emoji">${t.emoji}</span>
+      <span><b>${t.title}</b><div class="small">${t.desc}</div></span>
+    </button>`).join('');
+  document.getElementById('size').oninput = e => document.getElementById('sizeLabel').innerText = e.target.value;
+  resize(); loadGallery(); saveState();
+}
+function pickColor(c, el){
+  color=c; document.getElementById('customColor').value=c;
+  document.querySelectorAll('.color').forEach(x=>x.classList.remove('active'));
+  if(el) el.classList.add('active');
+}
+function setTool(t){
+  tool=t;
+  document.getElementById('toolBrush').classList.toggle('active',t==='brush');
+  document.getElementById('toolEraser').classList.toggle('active',t==='eraser');
+}
+function pos(e){
+  const r=dCanvas.getBoundingClientRect();
+  const p=e.touches ? e.touches[0] : e;
+  return {x:(p.clientX-r.left)*(dCanvas.width/r.width), y:(p.clientY-r.top)*(dCanvas.height/r.height)};
+}
+function start(e){drawing=true; const p=pos(e); lastX=p.x; lastY=p.y; saveState(); sparkle(e);}
+function move(e){
+  if(!drawing)return; e.preventDefault();
+  const p=pos(e);
+  dctx.globalCompositeOperation = tool==='eraser' ? 'destination-out' : 'source-over';
+  dctx.strokeStyle = tool==='eraser' ? 'rgba(0,0,0,1)' : color;
+  dctx.lineWidth = document.getElementById('size').value;
+  dctx.beginPath(); dctx.moveTo(lastX,lastY); dctx.lineTo(p.x,p.y); dctx.stroke();
+  lastX=p.x; lastY=p.y;
+}
+function end(){drawing=false; dctx.globalCompositeOperation='source-over';}
+['mousedown','touchstart'].forEach(ev=>dCanvas.addEventListener(ev,start,{passive:false}));
+['mousemove','touchmove'].forEach(ev=>dCanvas.addEventListener(ev,move,{passive:false}));
+['mouseup','mouseleave','touchend'].forEach(ev=>dCanvas.addEventListener(ev,end));
+
+function saveState(){
+  try{history.push(dCanvas.toDataURL()); if(history.length>18)history.shift();}catch(e){}
+}
+function undo(){
+  if(history.length<2)return;
+  history.pop();
+  const img=new Image();
+  img.onload=()=>{dctx.clearRect(0,0,dCanvas.width,dCanvas.height); dctx.drawImage(img,0,0,dCanvas.width,dCanvas.height);}
+  img.src=history[history.length-1];
+}
+function clearDrawing(){saveState(); dctx.clearRect(0,0,dCanvas.width,dCanvas.height);}
+function fillBackground(){
+  saveState();
+  dctx.globalCompositeOperation='destination-over';
+  dctx.fillStyle=color; dctx.fillRect(0,0,dCanvas.width,dCanvas.height);
+  dctx.globalCompositeOperation='source-over';
+}
+function line(x1,y1,x2,y2){tctx.beginPath();tctx.moveTo(x1,y1);tctx.lineTo(x2,y2);tctx.stroke();}
+function circle(x,y,r){tctx.beginPath();tctx.arc(x,y,r,0,Math.PI*2);tctx.stroke();}
+function heart(x,y,s){
+  tctx.beginPath();
+  tctx.moveTo(x,y+s/4);
+  tctx.bezierCurveTo(x-s,y-s/2,x-s*1.2,y+s/2,x,y+s);
+  tctx.bezierCurveTo(x+s*1.2,y+s/2,x+s,y-s/2,x,y+s/4);
+  tctx.stroke();
+}
+function star(x,y,r){
+  tctx.beginPath();
+  for(let i=0;i<10;i++){
+    const a=-Math.PI/2+i*Math.PI/5, rr=i%2?r:r/2;
+    const px=x+Math.cos(a)*rr, py=y+Math.sin(a)*rr;
+    i?tctx.lineTo(px,py):tctx.moveTo(px,py);
+  }
+  tctx.closePath();tctx.stroke();
+}
+function base(){
+  tctx.clearRect(0,0,tCanvas.width,tCanvas.height);
+  tctx.strokeStyle='#1f2937';tctx.lineWidth=4;tctx.lineCap='round';tctx.lineJoin='round';
+}
+function drawTemplate(id){
+  currentTemplate=id; base();
+  const w=tCanvas.width,h=tCanvas.height,cx=w/2;
+  tctx.font='bold 28px Arial'; tctx.fillStyle='#6d28d9'; tctx.textAlign='center';
+  const title=(templates.find(t=>t.id===id)||templates[0]).title;
+  tctx.fillText(title,cx,42);
+  tctx.strokeStyle='#111827';
+  if(id==='princesa-gelo'){
+    circle(cx,155,48); line(cx,205,cx,390); line(cx,250,cx-95,330); line(cx,250,cx+95,330);
+    tctx.beginPath();tctx.moveTo(cx-90,390);tctx.lineTo(cx,250);tctx.lineTo(cx+90,390);tctx.closePath();tctx.stroke();
+    for(let i=0;i<6;i++) star(80+i*(w-160)/5,500+(i%2)*38,24);
+    line(cx-80,110,cx,60);line(cx+80,110,cx,60);line(cx-80,110,cx+80,110);
+  } else if(id==='boneca-sombria'){
+    circle(cx,155,50); line(cx,205,cx,365); line(cx,245,cx-80,320); line(cx,245,cx+80,320);
+    line(cx-30,120,cx-95,250); line(cx+30,120,cx+95,250);
+    circle(cx-18,150,5); circle(cx+18,150,5); line(cx-20,178,cx+20,178); heart(cx,445,38);
+  } else if(id==='rainha-cartas'){
+    circle(cx,155,48); line(cx,205,cx,365);
+    tctx.strokeRect(cx-95,250,190,150); heart(cx,300,35); star(cx-70,325,25); star(cx+70,325,25);
+    line(cx-80,105,cx-30,55);line(cx-30,55,cx,105);line(cx,105,cx+30,55);line(cx+30,55,cx+80,105);
+  } else if(id==='danca-pop'){
+    circle(cx,160,45); line(cx,205,cx,375); line(cx,245,cx-110,245); line(cx,245,cx+85,185);
+    line(cx,375,cx-55,500); line(cx,375,cx+80,480);
+    tctx.strokeRect(cx-65,90,130,28); line(cx-35,90,cx+75,55);
+    star(cx+120,170,25); circle(cx+85,185,18);
+  } else if(id==='guerreira-kpop'){
+    circle(cx,145,45); line(cx,190,cx,360); line(cx,235,cx-95,305); line(cx,235,cx+105,275);
+    line(cx+105,275,cx+175,190); star(cx+175,190,22);
+    tctx.beginPath();tctx.moveTo(cx-90,390);tctx.lineTo(cx,270);tctx.lineTo(cx+90,390);tctx.stroke();
+    for(let i=0;i<5;i++) star(90+i*(w-180)/4,500,22);
+  } else if(id==='sereia'){
+    circle(cx,145,45); line(cx,190,cx,310); line(cx,230,cx-90,290); line(cx,230,cx+90,290);
+    tctx.beginPath();tctx.moveTo(cx,310);tctx.quadraticCurveTo(cx-90,420,cx,530);tctx.quadraticCurveTo(cx+90,420,cx,310);tctx.stroke();
+    line(cx,530,cx-70,585);line(cx,530,cx+70,585);circle(cx-120,440,20);circle(cx+130,465,16);
+  } else if(id==='unicornios'){
+    circle(cx,240,80); line(cx+10,160,cx+35,85);line(cx+35,85,cx+60,160);
+    circle(cx-25,230,6);circle(cx+35,230,6);heart(cx,390,40);
+    for(let i=0;i<6;i++) line(70+i*55,110,100+i*55,80);
+    tctx.beginPath();tctx.arc(cx,430,150,Math.PI,0);tctx.stroke();
+  } else if(id==='dragao-fofo'){
+    circle(cx,190,60); circle(cx-22,180,7); circle(cx+22,180,7); heart(cx,250,25);
+    tctx.beginPath();tctx.ellipse(cx,360,95,130,0,0,Math.PI*2);tctx.stroke();
+    line(cx-70,315,cx-170,230);line(cx+70,315,cx+170,230);star(cx+170,230,23);
+    line(cx-40,480,cx-80,560);line(cx+40,480,cx+80,560);
+  } else {
+    tctx.strokeRect(cx-160,250,320,250);
+    tctx.strokeRect(cx-110,160,60,90);tctx.strokeRect(cx+50,160,60,90);
+    line(cx-110,160,cx-80,110);line(cx-80,110,cx-50,160);
+    line(cx+50,160,cx+80,110);line(cx+80,110,cx+110,160);
+    tctx.beginPath();tctx.arc(cx,500,55,Math.PI,0);tctx.stroke();
+    star(cx,95,30);heart(cx,340,35);
+  }
+}
+function randomTemplate(){drawTemplate(templates[Math.floor(Math.random()*templates.length)].id);}
+function setMood(m){
+  mood=m;
+  const msgs={
+    Alegria:'Hoje a Sarah vai criar uma arte cheia de alegria ✨',
+    Coragem:'Cada cor mostra a coragem que existe dentro dela 💜',
+    Calma:'Respira, pinta devagar e deixa a imaginação brilhar 🌈',
+    Magia:'Aqui todo desenho vira uma pequena magia boa ⭐'
+  };
+  document.getElementById('moodText').innerText=msgs[m];
+}
+function addSticker(){
+  saveState();
+  const stickers=['✨','💖','🌈','⭐','🦋','🌸','🎵','👑','❄️','🦄'];
+  const s=stickers[Math.floor(Math.random()*stickers.length)];
+  dctx.font='52px Arial'; dctx.fillText(s,70+Math.random()*(dCanvas.width-140),90+Math.random()*(dCanvas.height-180));
+}
+function merge(){
+  const out=document.createElement('canvas'); out.width=dCanvas.width; out.height=dCanvas.height;
+  const o=out.getContext('2d'); o.fillStyle='#fff'; o.fillRect(0,0,out.width,out.height);
+  o.drawImage(tCanvas,0,0); o.drawImage(dCanvas,0,0); return out;
+}
+function saveArt(){
+  const data=merge().toDataURL('image/png');
+  const arr=JSON.parse(localStorage.getItem('sarahGallery')||'[]');
+  arr.unshift({data, date:new Date().toLocaleString('pt-BR'), mood});
+  localStorage.setItem('sarahGallery',JSON.stringify(arr.slice(0,8)));
+  loadGallery(); speakJoy();
+}
+function downloadArt(){
+  const a=document.createElement('a');
+  a.download='desenho-mundo-da-sarah.png';
+  a.href=merge().toDataURL('image/png');
+  a.click();
+}
+function loadGallery(){
+  const arr=JSON.parse(localStorage.getItem('sarahGallery')||'[]');
+  document.getElementById('gallery').innerHTML = arr.length ? arr.map((x,i)=>`
+    <div class="shot"><img src="${x.data}"><div class="small">${x.mood} • ${x.date}</div><button onclick="deleteShot(${i})">Apagar</button></div>
+  `).join('') : '<div class="small">Os desenhos salvos aparecem aqui.</div>';
+}
+function deleteShot(i){
+  const arr=JSON.parse(localStorage.getItem('sarahGallery')||'[]'); arr.splice(i,1);
+  localStorage.setItem('sarahGallery',JSON.stringify(arr)); loadGallery();
+}
+function speakJoy(){
+  const frases=[
+    'Sarah, seu desenho ficou lindo!',
+    'Você é muito criativa!',
+    'Cada cor sua deixa o mundo mais feliz!',
+    'Continue criando, pequena artista!'
+  ];
+  const txt=frases[Math.floor(Math.random()*frases.length)];
+  document.getElementById('moodText').innerText=txt+' 💖';
+  if('speechSynthesis' in window){
+    const u=new SpeechSynthesisUtterance(txt);
+    u.lang='pt-BR'; u.rate=.95; speechSynthesis.cancel(); speechSynthesis.speak(u);
+  }
+}
+function sparkle(e){
+  const p=e.touches?e.touches[0]:e;
+  const el=document.createElement('div'); el.className='sparkle'; el.innerText='✨';
+  el.style.left=p.clientX+'px'; el.style.top=p.clientY+'px'; document.body.appendChild(el);
+  setTimeout(()=>el.remove(),800);
+}
+init();
+</script>
+</body>
+</html>
