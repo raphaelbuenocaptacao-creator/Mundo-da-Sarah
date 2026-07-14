@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mundo da Sarah</title>
+<style>
+body{margin:0;font-family:Arial;background:linear-gradient(#87CEFA,#FFE4F2);text-align:center}
+header{background:#ff69b4;color:#fff;padding:20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;padding:20px;max-width:900px;margin:auto}
+.card{background:#fff;border-radius:16px;padding:20px;box-shadow:0 2px 8px #0002;cursor:pointer}
+#content{padding:20px}
+button{padding:10px 18px;border:none;border-radius:10px;background:#ff69b4;color:#fff}
+canvas{border:1px solid #ccc;background:#fff}
+</style>
+</head>
+<body>
+<header><h1>🌈 Mundo da Sarah 🌈</h1><p>Aprender e brincar!</p></header>
+<div class="grid">
+<div class="card" onclick="show('alfabeto')">🔤 Alfabeto</div>
+<div class="card" onclick="show('numeros')">🔢 Números</div>
+<div class="card" onclick="show('cores')">🎨 Cores</div>
+<div class="card" onclick="show('estrelas')">⭐ Pegar Estrelas</div>
+<div class="card" onclick="show('desenho')">🖍️ Desenhar</div>
+</div>
+<div id="content"></div>
+<script>
+function show(tipo){
+ const c=document.getElementById('content');
+ if(tipo==='alfabeto'){
+   c.innerHTML='<h2>Alfabeto</h2><h1>'+Array.from({length:26},(_,i)=>String.fromCharCode(65+i)).join(' ')+'</h1>';
+ }else if(tipo==='numeros'){
+   c.innerHTML='<h2>Números</h2><h1>'+Array.from({length:20},(_,i)=>i+1).join(' ')+'</h1>';
+ }else if(tipo==='cores'){
+   c.innerHTML='<h2>Cores</h2><div style="display:flex;justify-content:center;gap:10px"><div style="width:60px;height:60px;background:red"></div><div style="width:60px;height:60px;background:blue"></div><div style="width:60px;height:60px;background:green"></div><div style="width:60px;height:60px;background:yellow"></div></div>';
+ }else if(tipo==='estrelas'){
+   c.innerHTML='<h2>Clique nas estrelas!</h2><p>Pontos: <span id="p">0</span></p><div id="g"></div>';
+   let p=0,g=document.getElementById('g');
+   for(let i=0;i<12;i++){let b=document.createElement('button');b.textContent='⭐';b.onclick=()=>{p++;document.getElementById('p').textContent=p;b.remove();};g.appendChild(b);}
+ }else if(tipo==='desenho'){
+   c.innerHTML='<h2>Desenhe</h2><canvas id="cv" width="320" height="240"></canvas>';
+   let cv=document.getElementById('cv'),ctx=cv.getContext('2d'),d=false;
+   cv.onpointerdown=e=>{d=true;ctx.beginPath();ctx.moveTo(e.offsetX,e.offsetY);}
+   cv.onpointermove=e=>{if(d){ctx.lineTo(e.offsetX,e.offsetY);ctx.stroke();}}
+   window.onpointerup=()=>d=false;
+ }
+}
+</script>
+</body></html>
