@@ -1,4 +1,4 @@
-const CACHE_NAME='mundo-sarah-v8-friendship';
+const CACHE_NAME='mundo-sarah-v9-friendship-movement';
 const APP_SHELL=['./','./index.html','./amizades.html','./manifest.webmanifest','./icon-192.svg','./icon-512.svg','./icon-512-maskable.svg'];
 const PRIVATE_PATHS=['/api/','/auth','/login','/logout','/admin','/session','/token','/password','/account','/profile'];
 const SHELL_PATHS=new Set(APP_SHELL.map(path=>new URL(path,self.registration.scope).pathname));
