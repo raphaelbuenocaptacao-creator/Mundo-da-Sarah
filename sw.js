@@ -1,5 +1,5 @@
-const CACHE_NAME='mundo-sarah-v18-room-explore';
-const APP_SHELL=['./','./index.html','./amizades.html','./life-social-v8.js','./sim-life.js','./city-progress-v10.js','./routine-v11.js','./pet-care-v12.js','./home-care-v13.js','./room-explore-v14.js','./manifest.webmanifest','./icon-192.svg','./icon-512.svg','./icon-512-maskable.svg'];
+const CACHE_NAME='mundo-sarah-v19-city-journal';
+const APP_SHELL=['./','./index.html','./amizades.html','./life-social-v8.js','./sim-life.js','./city-progress-v10.js','./routine-v11.js','./pet-care-v12.js','./home-care-v13.js','./room-explore-v14.js','./city-journal-v15.js','./manifest.webmanifest','./icon-192.svg','./icon-512.svg','./icon-512-maskable.svg'];
 const PRIVATE_PATHS=['/api/','/auth','/login','/logout','/admin','/session','/token','/password','/account','/profile'];
 const SHELL_PATHS=new Set(APP_SHELL.map(path=>new URL(path,self.registration.scope).pathname));
 
@@ -25,6 +25,7 @@ async function injectLifeCycle(response){
   if(!enhanced.includes('pet-care-v12.js')) enhanced=enhanced.replace('</body>','<script src="./pet-care-v12.js"></script></body>');
   if(!enhanced.includes('home-care-v13.js')) enhanced=enhanced.replace('</body>','<script src="./home-care-v13.js"></script></body>');
   if(!enhanced.includes('room-explore-v14.js')) enhanced=enhanced.replace('</body>','<script src="./room-explore-v14.js"></script></body>');
+  if(!enhanced.includes('city-journal-v15.js')) enhanced=enhanced.replace('</body>','<script src="./city-journal-v15.js"></script></body>');
   return new Response(enhanced,{status:response.status,statusText:response.statusText,headers:response.headers});
 }
 
