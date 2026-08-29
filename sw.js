@@ -1,4 +1,4 @@
-const CACHE_NAME='mundo-sarah-v6-safe-shell';
+const CACHE_NAME='mundo-sarah-v7-life-sim';
 const APP_SHELL=['./','./index.html','./manifest.webmanifest','./icon-192.svg','./icon-512.svg','./icon-512-maskable.svg'];
 const PRIVATE_PATHS=['/api/','/auth','/login','/logout','/admin','/session','/token','/password','/account','/profile'];
 const SHELL_PATHS=new Set(APP_SHELL.map(path=>new URL(path,self.registration.scope).pathname));
