@@ -1,5 +1,5 @@
-const CACHE_NAME='mundo-sarah-v7-life-sim';
-const APP_SHELL=['./','./index.html','./manifest.webmanifest','./icon-192.svg','./icon-512.svg','./icon-512-maskable.svg'];
+const CACHE_NAME='mundo-sarah-v8-friendship';
+const APP_SHELL=['./','./index.html','./amizades.html','./manifest.webmanifest','./icon-192.svg','./icon-512.svg','./icon-512-maskable.svg'];
 const PRIVATE_PATHS=['/api/','/auth','/login','/logout','/admin','/session','/token','/password','/account','/profile'];
 const SHELL_PATHS=new Set(APP_SHELL.map(path=>new URL(path,self.registration.scope).pathname));
 
@@ -22,7 +22,7 @@ self.addEventListener('fetch',event=>{
   if(req.headers.has('authorization')||req.headers.has('cookie')) return;
 
   if(req.mode==='navigate'){
-    event.respondWith(fetch(req).catch(()=>caches.match('./index.html')));
+    event.respondWith(fetch(req).catch(()=>caches.match(url.pathname.endsWith('amizades.html')?'./amizades.html':'./index.html')));
     return;
   }
 
