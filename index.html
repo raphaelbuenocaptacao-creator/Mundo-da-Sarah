@@ -2,61 +2,68 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#ff69b4">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#a855f7">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Mundo da Sarah">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.svg" sizes="192x192" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon-192.svg">
-<title>Mundo da Sarah</title>
+<title>Mundo da Sarah ✨</title>
 <style>
-body{margin:0;font-family:Arial;background:linear-gradient(#87CEFA,#FFE4F2);text-align:center;min-height:100vh}
-header{background:#ff69b4;color:#fff;padding:20px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;padding:20px;max-width:900px;margin:auto}
-.card{background:#fff;border-radius:16px;padding:20px;box-shadow:0 2px 8px #0002;cursor:pointer;min-height:58px;display:grid;place-items:center}
-#content{padding:20px}
-button{padding:10px 18px;border:none;border-radius:10px;background:#ff69b4;color:#fff}
-canvas{border:1px solid #ccc;background:#fff;max-width:100%;touch-action:none}
-@media(max-width:480px){header{padding:16px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));padding:14px;gap:12px}.card{padding:16px 10px}#content{padding:14px}}
+:root{--pink:#ff5db1;--purple:#8b5cf6;--ice:#8ee7ff;--gold:#ffd166;--ink:#55315f;--glass:rgba(255,255,255,.78)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}body{margin:0;font-family:ui-rounded,"Arial Rounded MT Bold",system-ui,Arial;color:var(--ink);min-height:100vh;background:linear-gradient(180deg,#7edcff 0%,#d9c7ff 42%,#ffd7ef 100%);overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 15% 15%,#fff9 0 2px,transparent 3px),radial-gradient(circle at 75% 25%,#fff8 0 2px,transparent 3px),radial-gradient(circle at 45% 8%,#fff8 0 1px,transparent 2px);background-size:90px 90px,120px 120px,70px 70px;animation:twinkle 5s linear infinite}@keyframes twinkle{50%{opacity:.45}}
+.app{max-width:980px;margin:auto;padding-bottom:92px}.top{padding:env(safe-area-inset-top) 16px 8px;position:sticky;top:0;z-index:20;background:linear-gradient(#8d5df2ee,#a855f7cc);backdrop-filter:blur(16px);color:white;box-shadow:0 8px 28px #58317c33}.toprow{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:64px}.brand{display:flex;align-items:center;gap:10px}.crest{width:48px;height:48px;border-radius:18px;display:grid;place-items:center;font-size:28px;background:linear-gradient(145deg,#fff8,#ffffff22);box-shadow:inset 0 0 0 2px #fff8,0 8px 18px #4d2b7040}.brand h1{font-size:20px;margin:0}.brand small{display:block;opacity:.88;font-weight:700}.wallet{display:flex;gap:7px}.pill{background:#ffffff25;border:1px solid #ffffff55;border-radius:999px;padding:8px 10px;font-weight:900;white-space:nowrap}
+.hero{margin:16px;border-radius:30px;min-height:205px;padding:20px;position:relative;overflow:hidden;background:linear-gradient(135deg,#7657e8,#db73d5 58%,#ffafdc);color:white;box-shadow:0 18px 38px #673d8d30}.hero:after{content:"🏰";position:absolute;right:15px;bottom:-12px;font-size:118px;filter:drop-shadow(0 8px 10px #5b2d7133)}.hero h2{margin:0 0 8px;font-size:31px;max-width:60%;text-shadow:0 3px 0 #633f8840}.hero p{font-weight:800;max-width:58%;margin:0 0 16px}.cta{border:0;border-radius:18px;background:white;color:#8c46b1;font-weight:1000;padding:12px 16px;font-size:16px;box-shadow:0 8px 18px #5f2d7e33}
+.section{padding:0 16px 18px}.section-title{display:flex;align-items:center;justify-content:space-between;margin:3px 2px 10px}.section-title h3{margin:0;font-size:20px}.section-title span{font-size:13px;font-weight:800;opacity:.7}.worlds{display:grid;grid-template-columns:repeat(2,1fr);gap:13px}.world{border:0;text-align:left;min-height:152px;border-radius:26px;padding:16px;color:white;position:relative;overflow:hidden;box-shadow:0 12px 24px #6b4b8030;cursor:pointer}.world b{font-size:19px;display:block;max-width:75%;text-shadow:0 2px 3px #0002}.world small{font-weight:800;display:block;margin-top:5px;max-width:73%}.world .emoji{position:absolute;right:8px;bottom:1px;font-size:62px;filter:drop-shadow(0 7px 7px #0002)}.ice{background:linear-gradient(145deg,#4ab9f8,#98efff)}.rose{background:linear-gradient(145deg,#e85f9e,#ffadbd)}.royal{background:linear-gradient(145deg,#8b5cf6,#cf83ff)}.forest{background:linear-gradient(145deg,#3fbe9d,#90df93)}.sun{background:linear-gradient(145deg,#ff9f43,#ffd166)}.night{background:linear-gradient(145deg,#4f46a8,#8a69d4)}
+.tools{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.tool{border:0;border-radius:22px;background:var(--glass);padding:14px 6px;min-height:94px;box-shadow:0 8px 20px #71497920;color:var(--ink);font-weight:900}.tool i{font-style:normal;font-size:31px;display:block;margin-bottom:5px}
+.bottom{position:fixed;z-index:30;left:50%;transform:translateX(-50%);bottom:0;width:min(980px,100%);display:grid;grid-template-columns:repeat(4,1fr);padding:8px 10px calc(8px + env(safe-area-inset-bottom));background:#fffddd;backdrop-filter:blur(18px);border-top:1px solid #fff;box-shadow:0 -12px 35px #6e4d8520}.nav{border:0;background:none;color:#774b80;font-weight:900;padding:5px}.nav i{font-style:normal;font-size:24px;display:block}.nav.active{color:#a342c5}
+.sheet{position:fixed;inset:0;z-index:100;background:linear-gradient(180deg,#8bdcff,#edd4ff 45%,#ffddeb);display:none;overflow:auto;padding-bottom:40px}.sheet.open{display:block}.sheetbar{position:sticky;top:0;z-index:5;padding:calc(10px + env(safe-area-inset-top)) 14px 10px;display:flex;align-items:center;gap:10px;background:#8e5bdde8;color:#fff;backdrop-filter:blur(15px)}.back{width:44px;height:44px;border:0;border-radius:15px;background:#fff3;color:white;font-size:22px}.sheetbar h2{margin:0;font-size:20px}.panel{margin:16px;background:#ffffffce;border:1px solid white;border-radius:28px;padding:18px;box-shadow:0 15px 35px #6d4e8222}.bigemoji{text-align:center;font-size:90px}.choices{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.choice{border:2px solid #fff;border-radius:22px;background:#fff;padding:15px;font-size:16px;font-weight:900;color:var(--ink);box-shadow:0 8px 18px #5e47731c}.choice strong{display:block;font-size:36px;margin-bottom:4px}.choice.selected{outline:4px solid #ff77bd;background:#fff0f8}.mission{display:flex;gap:12px;align-items:center;background:#fff;border-radius:20px;padding:12px;margin:9px 0}.mission .icon{font-size:35px}.mission b{display:block}.progress{height:10px;border-radius:10px;background:#eee;overflow:hidden;margin-top:6px}.progress div{height:100%;background:linear-gradient(90deg,#ff63b6,#9b64e8)}.gamearea{text-align:center}.stargrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.starbtn{border:0;border-radius:18px;background:#fff;padding:13px;font-size:34px;box-shadow:0 6px 14px #5d4a701b}.drawtools{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin-bottom:10px}.color{width:40px;height:40px;border-radius:50%;border:4px solid white;box-shadow:0 2px 8px #0002}.canvaswrap{background:white;border-radius:20px;padding:8px}canvas{width:100%;max-width:520px;height:auto;background:white;border-radius:14px;touch-action:none}.primary{border:0;border-radius:18px;background:linear-gradient(135deg,#ff5db1,#8b5cf6);color:white;font-weight:1000;padding:13px 18px;font-size:16px}.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:92px;z-index:200;background:#55315f;color:white;padding:12px 17px;border-radius:999px;font-weight:900;opacity:0;pointer-events:none;transition:.25s}.toast.show{opacity:1;bottom:105px}
+@media(min-width:700px){.worlds{grid-template-columns:repeat(3,1fr)}.tools{grid-template-columns:repeat(6,1fr)}.hero{min-height:240px}.hero:after{font-size:150px}.hero h2{font-size:38px}}
+@media(max-width:430px){.wallet{gap:4px}.pill{font-size:12px;padding:7px}.hero h2{font-size:26px}.hero:after{font-size:98px}.hero p{font-size:14px}.world{min-height:140px}.tools{grid-template-columns:repeat(3,1fr)}}
 </style>
 </head>
 <body>
-<header><h1>🌈 Mundo da Sarah 🌈</h1><p>Aprender e brincar!</p></header>
-<div class="grid">
-<div class="card" onclick="show('alfabeto')">🔤 Alfabeto</div>
-<div class="card" onclick="show('numeros')">🔢 Números</div>
-<div class="card" onclick="show('cores')">🎨 Cores</div>
-<div class="card" onclick="show('estrelas')">⭐ Pegar Estrelas</div>
-<div class="card" onclick="show('desenho')">🖍️ Desenhar</div>
+<div class="app" id="home">
+<header class="top"><div class="toprow"><div class="brand"><div class="crest">👑</div><div><h1>Mundo da Sarah</h1><small>Reino Mágico ✨</small></div></div><div class="wallet"><div class="pill">⭐ <span id="stars">0</span></div><div class="pill">💎 <span id="gems">10</span></div></div></div></header>
+<section class="hero"><h2>Olá, Princesa Sarah! ✨</h2><p>Seu reino está cheio de aventuras, magia e surpresas.</p><button class="cta" onclick="openSheet('missões')">Começar aventura →</button></section>
+<section class="section"><div class="section-title"><h3>🗺️ Reinos mágicos</h3><span>toque para entrar</span></div><div class="worlds">
+<button class="world ice" onclick="world('Reino do Gelo','❄️','Encontre 8 cristais de neve!')"><b>Reino do Gelo</b><small>Neve, castelo e magia</small><span class="emoji">❄️🏰</span></button>
+<button class="world rose" onclick="world('Castelo da Rosa','🌹','Ajude a encontrar 6 rosas encantadas!')"><b>Castelo da Rosa</b><small>Biblioteca e jardim</small><span class="emoji">🌹📚</span></button>
+<button class="world royal" onclick="world('Baile Real','👗','Escolha um look e prepare o grande baile!')"><b>Baile Real</b><small>Vestidos e dança</small><span class="emoji">👗✨</span></button>
+<button class="world forest" onclick="world('Floresta dos Pets','🦄','Conheça um novo amigo mágico!')"><b>Floresta dos Pets</b><small>Unicórnios e bichinhos</small><span class="emoji">🦄🌈</span></button>
+<button class="world sun" onclick="world('Vila Encantada','🍰','Prepare um bolo mágico para a festa!')"><b>Vila Encantada</b><small>Doces e brincadeiras</small><span class="emoji">🍰🎈</span></button>
+<button class="world night" onclick="world('Torre das Estrelas','🌙','Pegue estrelas antes que amanheça!')"><b>Torre das Estrelas</b><small>Lua e constelações</small><span class="emoji">🌙⭐</span></button>
+</div></section>
+<section class="section"><div class="section-title"><h3>🎮 Brincadeiras</h3><span>aprenda brincando</span></div><div class="tools">
+<button class="tool" onclick="openSheet('avatar')"><i>👸</i>Minha Princesa</button><button class="tool" onclick="openSheet('roupas')"><i>👗</i>Guarda-roupa</button><button class="tool" onclick="openSheet('pets')"><i>🦄</i>Meus Pets</button><button class="tool" onclick="openSheet('estrelas')"><i>⭐</i>Caça-estrelas</button><button class="tool" onclick="openSheet('desenho')"><i>🎨</i>Desenhar</button><button class="tool" onclick="openSheet('aprender')"><i>🔤</i>Aprender</button>
+</div></section>
 </div>
-<div id="content"></div>
+<nav class="bottom"><button class="nav active" onclick="closeSheet()"><i>🏰</i>Reino</button><button class="nav" onclick="openSheet('missões')"><i>📜</i>Missões</button><button class="nav" onclick="openSheet('roupas')"><i>👗</i>Looks</button><button class="nav" onclick="openSheet('pets')"><i>🦄</i>Pets</button></nav>
+<div class="sheet" id="sheet"><div class="sheetbar"><button class="back" onclick="closeSheet()">←</button><h2 id="sheetTitle">Aventura</h2></div><div id="sheetContent"></div></div><div class="toast" id="toast">Muito bem! ✨</div>
 <script>
-function show(tipo){
- const c=document.getElementById('content');
- if(tipo==='alfabeto'){
-   c.innerHTML='<h2>Alfabeto</h2><h1>'+Array.from({length:26},(_,i)=>String.fromCharCode(65+i)).join(' ')+'</h1>';
- }else if(tipo==='numeros'){
-   c.innerHTML='<h2>Números</h2><h1>'+Array.from({length:20},(_,i)=>i+1).join(' ')+'</h1>';
- }else if(tipo==='cores'){
-   c.innerHTML='<h2>Cores</h2><div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap"><div style="width:60px;height:60px;background:red"></div><div style="width:60px;height:60px;background:blue"></div><div style="width:60px;height:60px;background:green"></div><div style="width:60px;height:60px;background:yellow"></div></div>';
- }else if(tipo==='estrelas'){
-   c.innerHTML='<h2>Clique nas estrelas!</h2><p>Pontos: <span id="p">0</span></p><div id="g"></div>';
-   let p=0,g=document.getElementById('g');
-   for(let i=0;i<12;i++){let b=document.createElement('button');b.textContent='⭐';b.onclick=()=>{p++;document.getElementById('p').textContent=p;b.remove();};g.appendChild(b);}
- }else if(tipo==='desenho'){
-   c.innerHTML='<h2>Desenhe</h2><canvas id="cv" width="320" height="240"></canvas>';
-   let cv=document.getElementById('cv'),ctx=cv.getContext('2d'),d=false;
-   const point=e=>{const r=cv.getBoundingClientRect();return {x:(e.clientX-r.left)*(cv.width/r.width),y:(e.clientY-r.top)*(cv.height/r.height)}};
-   cv.onpointerdown=e=>{d=true;const p=point(e);ctx.beginPath();ctx.moveTo(p.x,p.y);cv.setPointerCapture?.(e.pointerId)};
-   cv.onpointermove=e=>{if(d){const p=point(e);ctx.lineTo(p.x,p.y);ctx.stroke();}};
-   cv.onpointerup=cv.onpointercancel=()=>d=false;
- }
-}
-if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost')){
- window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
-}
+const KEY='mundoSarahSave2';let state=JSON.parse(localStorage.getItem(KEY)||'null')||{stars:0,gems:10,avatar:'👸',dress:'👗',pet:'🦄',done:0};
+function save(){localStorage.setItem(KEY,JSON.stringify(state));renderWallet()}function renderWallet(){stars.textContent=state.stars;gems.textContent=state.gems}renderWallet();
+function toast(t){const e=document.getElementById('toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),1400)}
+function openSheet(type){sheet.classList.add('open');document.body.style.overflow='hidden';const c=document.getElementById('sheetContent');const t=document.getElementById('sheetTitle');
+if(type==='missões'){t.textContent='📜 Missões da Sarah';c.innerHTML=`<div class="panel"><div class="bigemoji">🏰✨</div><h3>Missões de hoje</h3>${mission('⭐','Colete 10 estrelas',Math.min(state.stars,10),10)}${mission('👗','Escolha um vestido',state.dress?1:0,1)}${mission('🦄','Visite seu pet',state.pet?1:0,1)}<button class="primary" onclick="openSheet('estrelas')">Jogar agora</button></div>`}
+if(type==='avatar'){t.textContent='👸 Minha Princesa';c.innerHTML=`<div class="panel"><div class="bigemoji" id="avatarPreview">${state.avatar}</div><h3>Escolha sua princesa</h3><div class="choices">${['👸','🧚‍♀️','🧜‍♀️','🦸‍♀️'].map(x=>`<button class="choice ${state.avatar===x?'selected':''}" onclick="pick('avatar','${x}');openSheet('avatar')"><strong>${x}</strong>Escolher</button>`).join('')}</div></div>`}
+if(type==='roupas'){t.textContent='👗 Guarda-roupa Real';const items=[['👗','Vestido Rosa'],['🩵','Vestido de Gelo'],['💜','Vestido Real'],['🌹','Vestido da Rosa'],['🦋','Look Borboleta'],['✨','Look Estelar']];c.innerHTML=`<div class="panel"><div class="bigemoji">${state.avatar}${state.dress}</div><h3>Escolha um look</h3><div class="choices">${items.map(([e,n])=>`<button class="choice ${state.dress===e?'selected':''}" onclick="pick('dress','${e}');openSheet('roupas')"><strong>${e}</strong>${n}</button>`).join('')}</div></div>`}
+if(type==='pets'){t.textContent='🦄 Floresta dos Pets';const items=[['🦄','Lumi, o unicórnio'],['🐰','Pipoca, a coelhinha'],['🐱','Mimi, a gatinha'],['🐶','Biscoito, o cachorrinho'],['🦋','Lila, a borboleta'],['🐧','Neve, o pinguim']];c.innerHTML=`<div class="panel"><div class="bigemoji">${state.pet}</div><h3>Seu amigo mágico</h3><div class="choices">${items.map(([e,n])=>`<button class="choice ${state.pet===e?'selected':''}" onclick="pick('pet','${e}');openSheet('pets')"><strong>${e}</strong>${n}</button>`).join('')}</div></div>`}
+if(type==='estrelas'){t.textContent='⭐ Caça-estrelas';c.innerHTML=`<div class="panel gamearea"><div class="bigemoji">🌙⭐</div><h3>Pegue todas as estrelas!</h3><p>Cada estrela vale 1 ponto.</p><div class="stargrid" id="stargrid"></div></div>`;spawnStars()}
+if(type==='desenho'){t.textContent='🎨 Ateliê da Princesa';c.innerHTML=`<div class="panel gamearea"><h3>Desenhe seu reino</h3><div class="drawtools"><button class="color" style="background:#ff5db1" onclick="setInk('#ff5db1')"></button><button class="color" style="background:#8b5cf6" onclick="setInk('#8b5cf6')"></button><button class="color" style="background:#55c7ff" onclick="setInk('#55c7ff')"></button><button class="color" style="background:#ffd166" onclick="setInk('#ffd166')"></button><button class="primary" onclick="clearCanvas()">Limpar</button></div><div class="canvaswrap"><canvas id="cv" width="600" height="440"></canvas></div></div>`;initCanvas()}
+if(type==='aprender'){t.textContent='🔤 Escola Mágica';c.innerHTML=`<div class="panel"><div class="bigemoji">📚✨</div><h3>Escolha uma brincadeira</h3><div class="choices"><button class="choice" onclick="lesson('abc')"><strong>ABC</strong>Alfabeto</button><button class="choice" onclick="lesson('num')"><strong>123</strong>Números</button><button class="choice" onclick="lesson('color')"><strong>🌈</strong>Cores</button><button class="choice" onclick="lesson('shape')"><strong>🔷</strong>Formas</button></div><div id="lesson"></div></div>`}}
+function closeSheet(){sheet.classList.remove('open');document.body.style.overflow='';}
+function mission(icon,name,val,max){return `<div class="mission"><div class="icon">${icon}</div><div style="flex:1"><b>${name}</b><small>${val}/${max}</small><div class="progress"><div style="width:${Math.min(100,val/max*100)}%"></div></div></div></div>`}
+function pick(k,v){state[k]=v;state.gems++;save();toast('Escolha mágica! +1 💎')}
+function spawnStars(){const g=document.getElementById('stargrid');if(!g)return;for(let i=0;i<12;i++){const b=document.createElement('button');b.className='starbtn';b.textContent=i%4===0?'💫':'⭐';b.onclick=()=>{state.stars++;if(state.stars%10===0)state.gems+=3;save();b.style.visibility='hidden';toast('Estrela encontrada! ⭐')};g.appendChild(b)}}
+function world(name,emoji,missionText){sheet.classList.add('open');document.body.style.overflow='hidden';sheetTitle.textContent=emoji+' '+name;sheetContent.innerHTML=`<div class="panel gamearea"><div class="bigemoji">${emoji}</div><h2>${name}</h2><p style="font-size:18px;font-weight:800">${missionText}</p><button class="primary" onclick="worldReward()">✨ Completar missão</button><div style="margin-top:20px;font-size:70px">${state.avatar} ${state.pet}</div></div>`}
+function worldReward(){state.stars+=3;state.gems+=1;state.done++;save();toast('Missão completa! +3 ⭐ +1 💎')}
+function lesson(type){const l=document.getElementById('lesson');if(type==='abc')l.innerHTML='<h2 style="line-height:1.8">A B C D E F G H I J K L M N O P Q R S T U V W X Y Z</h2>';if(type==='num')l.innerHTML='<h2 style="line-height:1.8">1 · 2 · 3 · 4 · 5 · 6 · 7 · 8 · 9 · 10</h2>';if(type==='color')l.innerHTML='<div style="font-size:55px">🔴 🟠 🟡 🟢 🔵 🟣</div>';if(type==='shape')l.innerHTML='<div style="font-size:55px">🔵 🔺 🟨 💜 ⭐</div>'}
+let ink='#ff5db1',ctx,cv,drawing=false;function setInk(c){ink=c}function initCanvas(){cv=document.getElementById('cv');ctx=cv.getContext('2d');ctx.lineCap='round';ctx.lineJoin='round';ctx.lineWidth=9;const p=e=>{const r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)*cv.width/r.width,y:(e.clientY-r.top)*cv.height/r.height}};cv.onpointerdown=e=>{drawing=true;const q=p(e);ctx.beginPath();ctx.moveTo(q.x,q.y)};cv.onpointermove=e=>{if(!drawing)return;const q=p(e);ctx.strokeStyle=ink;ctx.lineTo(q.x,q.y);ctx.stroke()};cv.onpointerup=cv.onpointercancel=()=>drawing=false}function clearCanvas(){if(ctx)ctx.clearRect(0,0,cv.width,cv.height)}
+if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'))window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 </script>
 </body></html>
