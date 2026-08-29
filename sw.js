@@ -1,5 +1,5 @@
-const CACHE_NAME='mundo-sarah-v10-social-life';
-const APP_SHELL=['./','./index.html','./amizades.html','./life-social-v8.js','./manifest.webmanifest','./icon-192.svg','./icon-512.svg','./icon-512-maskable.svg'];
+const CACHE_NAME='mundo-sarah-v11-life-cycle';
+const APP_SHELL=['./','./index.html','./amizades.html','./life-social-v8.js','./sim-life.js','./manifest.webmanifest','./icon-192.svg','./icon-512.svg','./icon-512-maskable.svg'];
 const PRIVATE_PATHS=['/api/','/auth','/login','/logout','/admin','/session','/token','/password','/account','/profile'];
 const SHELL_PATHS=new Set(APP_SHELL.map(path=>new URL(path,self.registration.scope).pathname));
 
@@ -13,6 +13,16 @@ self.addEventListener('activate',event=>{
   self.clients.claim();
 });
 
+async function injectLifeCycle(response){
+  if(!response||!response.ok) return response;
+  const type=response.headers.get('content-type')||'';
+  if(!type.includes('text/html')) return response;
+  const text=await response.text();
+  if(text.includes('sim-life.js')) return new Response(text,{status:response.status,statusText:response.statusText,headers:response.headers});
+  const enhanced=text.replace('</body>','<script src="./sim-life.js"></script></body>');
+  return new Response(enhanced,{status:response.status,statusText:response.statusText,headers:response.headers});
+}
+
 self.addEventListener('fetch',event=>{
   const req=event.request;
   if(req.method!=='GET') return;
@@ -22,7 +32,16 @@ self.addEventListener('fetch',event=>{
   if(req.headers.has('authorization')||req.headers.has('cookie')) return;
 
   if(req.mode==='navigate'){
-    event.respondWith(fetch(req).catch(()=>caches.match(url.pathname.endsWith('amizades.html')?'./amizades.html':'./index.html')));
+    event.respondWith((async()=>{
+      const isFriends=url.pathname.endsWith('amizades.html');
+      try{
+        const fresh=await fetch(req);
+        return isFriends?fresh:injectLifeCycle(fresh);
+      }catch{
+        const cached=await caches.match(isFriends?'./amizades.html':'./index.html');
+        return isFriends?cached:injectLifeCycle(cached);
+      }
+    })());
     return;
   }
 
