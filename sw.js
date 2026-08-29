@@ -1,5 +1,5 @@
-const CACHE_NAME='mundo-sarah-v14-city-progression';
-const APP_SHELL=['./','./index.html','./amizades.html','./life-social-v8.js','./sim-life.js','./city-progress-v10.js','./manifest.webmanifest','./icon-192.svg','./icon-512.svg','./icon-512-maskable.svg'];
+const CACHE_NAME='mundo-sarah-v15-daily-routine';
+const APP_SHELL=['./','./index.html','./amizades.html','./life-social-v8.js','./sim-life.js','./city-progress-v10.js','./routine-v11.js','./manifest.webmanifest','./icon-192.svg','./icon-512.svg','./icon-512-maskable.svg'];
 const PRIVATE_PATHS=['/api/','/auth','/login','/logout','/admin','/session','/token','/password','/account','/profile'];
 const SHELL_PATHS=new Set(APP_SHELL.map(path=>new URL(path,self.registration.scope).pathname));
 
@@ -21,6 +21,7 @@ async function injectLifeCycle(response){
   let enhanced=text;
   if(!enhanced.includes('sim-life.js')) enhanced=enhanced.replace('</body>','<script src="./sim-life.js"></script></body>');
   if(!enhanced.includes('city-progress-v10.js')) enhanced=enhanced.replace('</body>','<script src="./city-progress-v10.js"></script></body>');
+  if(!enhanced.includes('routine-v11.js')) enhanced=enhanced.replace('</body>','<script src="./routine-v11.js"></script></body>');
   return new Response(enhanced,{status:response.status,statusText:response.statusText,headers:response.headers});
 }
 
