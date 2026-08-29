@@ -1,4 +1,4 @@
-const CACHE_NAME='mundo-sarah-v11-life-cycle';
+const CACHE_NAME='mundo-sarah-v12-skills';
 const APP_SHELL=['./','./index.html','./amizades.html','./life-social-v8.js','./sim-life.js','./manifest.webmanifest','./icon-192.svg','./icon-512.svg','./icon-512-maskable.svg'];
 const PRIVATE_PATHS=['/api/','/auth','/login','/logout','/admin','/session','/token','/password','/account','/profile'];
 const SHELL_PATHS=new Set(APP_SHELL.map(path=>new URL(path,self.registration.scope).pathname));
