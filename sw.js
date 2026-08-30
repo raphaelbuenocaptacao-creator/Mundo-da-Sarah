@@ -1,7 +1,15 @@
-const CACHE_NAME='mundo-sarah-v22-needs-guide';
+const CACHE_NAME='mundo-sarah-v23-safe-shell';
 const APP_SHELL=['./','./index.html','./amizades.html','./life-social-v8.js','./sim-life.js','./city-progress-v10.js','./routine-v11.js','./pet-care-v12.js','./home-care-v13.js','./room-explore-v14.js','./city-journal-v15.js','./home-objects-v16.js','./decor-studio-v17.js','./needs-guide-v18.js','./manifest.webmanifest','./icon-192.svg','./icon-512.svg','./icon-512-maskable.svg'];
 const PRIVATE_PATHS=['/api/','/auth','/login','/logout','/admin','/session','/token','/password','/account','/profile'];
+const SENSITIVE_QUERY_KEYS=['token','access_token','refresh_token','password','secret','session','auth','authorization','api_key','apikey','key','code','credential'];
 const SHELL_PATHS=new Set(APP_SHELL.map(path=>new URL(path,self.registration.scope).pathname));
+
+function hasSensitiveQuery(url){
+  for(const key of url.searchParams.keys()){
+    if(SENSITIVE_QUERY_KEYS.includes(key.toLowerCase())) return true;
+  }
+  return false;
+}
 
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(APP_SHELL)));
@@ -39,12 +47,13 @@ self.addEventListener('fetch',event=>{
   if(url.origin!==self.location.origin) return;
   if(PRIVATE_PATHS.some(path=>url.pathname.toLowerCase().includes(path))) return;
   if(req.headers.has('authorization')||req.headers.has('cookie')) return;
+  if(hasSensitiveQuery(url)) return;
 
   if(req.mode==='navigate'){
     event.respondWith((async()=>{
       const isFriends=url.pathname.endsWith('amizades.html');
       try{
-        const fresh=await fetch(req);
+        const fresh=await fetch(req,{cache:'no-store'});
         return isFriends?fresh:injectLifeCycle(fresh);
       }catch{
         const cached=await caches.match(isFriends?'./amizades.html':'./index.html');
@@ -54,6 +63,7 @@ self.addEventListener('fetch',event=>{
     return;
   }
 
+  if(url.search) return;
   if(!SHELL_PATHS.has(url.pathname)) return;
   event.respondWith(caches.match(req).then(cached=>cached||fetch(req).then(res=>{
     if(res&&res.ok){const copy=res.clone();caches.open(CACHE_NAME).then(cache=>cache.put(req,copy));}
