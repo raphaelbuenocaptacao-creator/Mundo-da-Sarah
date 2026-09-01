@@ -1,4 +1,5 @@
-const CACHE_NAME='mundo-sarah-v23-safe-shell';
+const CACHE_PREFIX='mundo-sarah-';
+const CACHE_NAME=`${CACHE_PREFIX}v24-safe-shell`;
 const APP_SHELL=['./','./index.html','./amizades.html','./life-social-v8.js','./sim-life.js','./city-progress-v10.js','./routine-v11.js','./pet-care-v12.js','./home-care-v13.js','./room-explore-v14.js','./city-journal-v15.js','./home-objects-v16.js','./decor-studio-v17.js','./needs-guide-v18.js','./manifest.webmanifest','./icon-192.svg','./icon-512.svg','./icon-512-maskable.svg'];
 const PRIVATE_PATHS=['/api/','/auth','/login','/logout','/admin','/session','/token','/password','/account','/profile'];
 const SENSITIVE_QUERY_KEYS=['token','access_token','refresh_token','password','secret','session','auth','authorization','api_key','apikey','key','code','credential'];
@@ -11,14 +12,40 @@ function hasSensitiveQuery(url){
   return false;
 }
 
+function isSafeCacheResponse(response){
+  if(!response||!response.ok||response.status===206||response.type==='opaque') return false;
+  const cacheControl=(response.headers.get('cache-control')||'').toLowerCase();
+  if(cacheControl.includes('no-store')||cacheControl.includes('private')) return false;
+  if(response.headers.has('set-cookie')) return false;
+  return true;
+}
+
+async function precacheShell(){
+  const cache=await caches.open(CACHE_NAME);
+  await Promise.all(APP_SHELL.map(async path=>{
+    try{
+      const request=new Request(path,{credentials:'omit',cache:'reload'});
+      const response=await fetch(request);
+      if(isSafeCacheResponse(response)) await cache.put(request,response.clone());
+    }catch(error){
+      console.warn('[Mundo da Sarah PWA] precache skipped:',path,error);
+    }
+  }));
+}
+
 self.addEventListener('install',event=>{
-  event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(APP_SHELL)));
+  event.waitUntil(precacheShell());
   self.skipWaiting();
 });
 
 self.addEventListener('activate',event=>{
-  event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE_NAME).map(key=>caches.delete(key)))));
-  self.clients.claim();
+  event.waitUntil((async()=>{
+    const keys=await caches.keys();
+    await Promise.all(keys
+      .filter(key=>key.startsWith(CACHE_PREFIX)&&key!==CACHE_NAME)
+      .map(key=>caches.delete(key)));
+    await self.clients.claim();
+  })());
 });
 
 async function injectLifeCycle(response){
@@ -40,6 +67,11 @@ async function injectLifeCycle(response){
   return new Response(enhanced,{status:response.status,statusText:response.statusText,headers:response.headers});
 }
 
+async function matchOwnCache(request){
+  const cache=await caches.open(CACHE_NAME);
+  return cache.match(request,{ignoreSearch:true});
+}
+
 self.addEventListener('fetch',event=>{
   const req=event.request;
   if(req.method!=='GET') return;
@@ -56,8 +88,13 @@ self.addEventListener('fetch',event=>{
         const fresh=await fetch(req,{cache:'no-store'});
         return isFriends?fresh:injectLifeCycle(fresh);
       }catch{
-        const cached=await caches.match(isFriends?'./amizades.html':'./index.html');
-        return isFriends?cached:injectLifeCycle(cached);
+        const fallbackRequest=new Request(isFriends?'./amizades.html':'./index.html',{credentials:'omit'});
+        const cached=await matchOwnCache(fallbackRequest);
+        if(cached) return isFriends?cached:injectLifeCycle(cached);
+        return new Response('Sem conexão. Reconecte-se para continuar.',{
+          status:503,
+          headers:{'Content-Type':'text/plain; charset=utf-8','Cache-Control':'no-store'}
+        });
       }
     })());
     return;
@@ -65,8 +102,13 @@ self.addEventListener('fetch',event=>{
 
   if(url.search) return;
   if(!SHELL_PATHS.has(url.pathname)) return;
-  event.respondWith(caches.match(req).then(cached=>cached||fetch(req).then(res=>{
-    if(res&&res.ok){const copy=res.clone();caches.open(CACHE_NAME).then(cache=>cache.put(req,copy));}
-    return res;
-  })));
+  event.respondWith((async()=>{
+    const cache=await caches.open(CACHE_NAME);
+    const cached=await cache.match(req,{ignoreSearch:true});
+    if(cached) return cached;
+    const safeRequest=new Request(req,{credentials:'omit'});
+    const response=await fetch(safeRequest);
+    if(isSafeCacheResponse(response)) await cache.put(safeRequest,response.clone());
+    return response;
+  })());
 });
