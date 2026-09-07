@@ -1,5 +1,5 @@
 const CACHE_PREFIX='mundo-sarah-';
-const CACHE_NAME=`${CACHE_PREFIX}v24-safe-shell`;
+const CACHE_NAME=`${CACHE_PREFIX}v25-private-vary-safe-shell`;
 const APP_SHELL=['./','./index.html','./amizades.html','./life-social-v8.js','./sim-life.js','./city-progress-v10.js','./routine-v11.js','./pet-care-v12.js','./home-care-v13.js','./room-explore-v14.js','./city-journal-v15.js','./home-objects-v16.js','./decor-studio-v17.js','./needs-guide-v18.js','./manifest.webmanifest','./icon-192.svg','./icon-512.svg','./icon-512-maskable.svg'];
 const PRIVATE_PATHS=['/api/','/auth','/login','/logout','/admin','/session','/token','/password','/account','/profile'];
 const SENSITIVE_QUERY_KEYS=['token','access_token','refresh_token','password','secret','session','auth','authorization','api_key','apikey','key','code','credential'];
@@ -17,6 +17,8 @@ function isSafeCacheResponse(response){
   const cacheControl=(response.headers.get('cache-control')||'').toLowerCase();
   if(cacheControl.includes('no-store')||cacheControl.includes('private')) return false;
   if(response.headers.has('set-cookie')) return false;
+  const vary=(response.headers.get('vary')||'').toLowerCase();
+  if(vary.split(',').map(value=>value.trim()).some(value=>value==='*'||value==='cookie'||value==='authorization')) return false;
   return true;
 }
 
