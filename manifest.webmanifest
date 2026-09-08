@@ -2,13 +2,13 @@
   "id": "./",
   "name": "Mundo da Sarah",
   "short_name": "Sarah",
-  "description": "Simulador de vida infantil com casa, cidade, pets, roupas, amizades e brincadeiras.",
+  "description": "Mundo mágico infantil com princesa, salão, roupas, exploração, pets, jogos e aventuras.",
   "lang": "pt-BR",
-  "start_url": "./",
+  "start_url": "./mundo-magico.html",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#ccecff",
-  "theme_color": "#7557c8",
+  "background_color": "#f5efff",
+  "theme_color": "#7056c5",
   "categories": ["games", "education", "kids"],
   "icons": [
     {"src":"icon-192.png","sizes":"192x192","type":"image/png","purpose":"any"},
@@ -16,11 +16,7 @@
     {"src":"icon-512-maskable.png","sizes":"512x512","type":"image/png","purpose":"maskable"}
   ],
   "shortcuts": [
-    {
-      "name": "Jardim das Amizades",
-      "short_name": "Amizades",
-      "description": "Brinque com Luna e aumente a amizade.",
-      "url": "./amizades.html"
-    }
+    {"name":"Mundo Mágico","short_name":"Mundo","description":"Explore o Reino, Vale das Flores, Planeta das Estrelas e Praia Mágica.","url":"./mundo-magico.html"},
+    {"name":"Jardim das Amizades","short_name":"Amizades","description":"Brinque com Luna e aumente a amizade.","url":"./amizades.html"}
   ]
 }
