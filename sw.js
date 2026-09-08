@@ -1,6 +1,6 @@
 const CACHE_PREFIX='mundo-sarah-';
-const CACHE_NAME=`${CACHE_PREFIX}v30-magic-world`;
-const SCRIPTS=['sim-life.js','city-progress-v10.js','routine-v11.js','pet-care-v12.js','home-care-v13.js','room-explore-v14.js','city-journal-v15.js','home-objects-v16.js','decor-studio-v17.js','needs-guide-v18.js','magic-hub-v30.js','magic-salon-v30.js','magic-wardrobe-v30.js','magic-games-v30.js'];
+const CACHE_NAME=`${CACHE_PREFIX}v30-magic-world-2`;
+const SCRIPTS=['sim-life.js','city-progress-v10.js','routine-v11.js','pet-care-v12.js','home-care-v13.js','room-explore-v14.js','city-journal-v15.js','home-objects-v16.js','decor-studio-v17.js','needs-guide-v18.js','magic-hub-v30.js','magic-salon-v30.js','magic-wardrobe-v30.js','magic-games-v30.js','magic-patch-v30.js'];
 const APP_SHELL=['./','./index.html','./amizades.html','./manifest.webmanifest','./icon-192.svg','./icon-512.svg','./icon-512-maskable.svg',...SCRIPTS.map(x=>'./'+x)];
 const PRIVATE_PATHS=['/api/','/auth','/login','/logout','/admin','/session','/token','/password','/account','/profile'];
 const SENSITIVE_QUERY_KEYS=['token','access_token','refresh_token','password','secret','session','auth','authorization','api_key','apikey','key','code','credential'];
