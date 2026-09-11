@@ -39,3 +39,7 @@ jobs:
           grep -q "no-store" sw.js
           grep -q "private" sw.js
           grep -q "CACHE_PREFIX" sw.js
+      - name: Validate versioned service worker registration
+        run: |
+          grep -q "sw.js?v=31-range-safe" index.html
+          grep -q "updateViaCache:'none'" index.html
