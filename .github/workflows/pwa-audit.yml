@@ -1,0 +1,41 @@
+name: Mundo da Sarah PWA Audit
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pwa-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate required PWA files
+        run: |
+          test -f manifest.webmanifest
+          test -f sw.js
+          test -f icon-192.png
+          test -f icon-512.png
+          test -f icon-512-maskable.png
+      - name: Validate manifest basics
+        run: |
+          grep -q '"name"' manifest.webmanifest
+          grep -q '"short_name"' manifest.webmanifest
+          grep -q '"start_url"' manifest.webmanifest
+          grep -q '"display"' manifest.webmanifest
+          grep -q '192x192' manifest.webmanifest
+          grep -q '512x512' manifest.webmanifest
+          grep -q 'maskable' manifest.webmanifest
+      - name: Validate private and range-safe cache policy
+        run: |
+          grep -q "authorization" sw.js
+          grep -q "cookie" sw.js
+          grep -q "range" sw.js
+          grep -q "if-range" sw.js
+          grep -q "content-range" sw.js
+          grep -q "no-store" sw.js
+          grep -q "private" sw.js
+          grep -q "CACHE_PREFIX" sw.js
