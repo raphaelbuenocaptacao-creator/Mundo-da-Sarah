@@ -44,3 +44,4 @@ jobs:
           SW_VERSION=$(grep "CACHE_NAME" sw.js | grep -oE 'v[0-9]+[-A-Za-z0-9._]*' | head -1)
           test -n "$SW_VERSION"
           grep -Fq "sw.js?v=${SW_VERSION}" index.html
+          grep -Fq "updateViaCache:'none'" index.html
