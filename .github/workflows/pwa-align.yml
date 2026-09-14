@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Align secure service worker registration with cache version
+      - name: Align secure service worker registration and install metadata
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -38,17 +38,29 @@ jobs:
           updated, count = re.subn(pattern, replacement, html, count=1)
           if count != 1:
               raise SystemExit('Could not find service worker registration')
+
+          install_meta = []
+          if 'name="mobile-web-app-capable"' not in updated:
+              install_meta.append('<meta name="mobile-web-app-capable" content="yes">')
+          if 'name="apple-mobile-web-app-capable"' not in updated:
+              install_meta.append('<meta name="apple-mobile-web-app-capable" content="yes">')
+          if install_meta:
+              marker = '</head>'
+              if marker not in updated:
+                  raise SystemExit('Could not find </head> for PWA metadata')
+              updated = updated.replace(marker, '\n'.join(install_meta) + '\n' + marker, 1)
+
           if updated != html:
               html_path.write_text(updated)
           PY
       - name: Commit alignment when needed
         run: |
           if git diff --quiet -- index.html; then
-            echo 'Service worker registration already aligned and secure.'
+            echo 'Service worker registration and install metadata already aligned.'
             exit 0
           fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add index.html
-          git commit -m 'fix(pwa): secure Mundo da Sarah service worker registration'
+          git commit -m 'fix(pwa): complete Mundo da Sarah install metadata'
           git push
