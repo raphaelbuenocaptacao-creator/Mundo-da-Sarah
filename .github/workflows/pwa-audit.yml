@@ -31,6 +31,8 @@ jobs:
           grep -q 'maskable' manifest.webmanifest
       - name: Validate mobile install metadata
         run: |
+          grep -Fq 'name="viewport"' index.html
+          grep -Fq 'rel="manifest"' index.html
           grep -Fq 'name="theme-color"' index.html
           grep -Fq 'name="mobile-web-app-capable" content="yes"' index.html
           grep -Fq 'name="apple-mobile-web-app-capable" content="yes"' index.html
