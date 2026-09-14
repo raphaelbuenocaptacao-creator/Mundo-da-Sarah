@@ -30,7 +30,7 @@ jobs:
               raise SystemExit('Could not determine service worker version')
           version = match.group(0)
 
-          pattern = r"if\('serviceWorker'in navigator\)(?:&&\(location\.protocol==='https:'\|\|location\.hostname==='localhost'\))?navigator\.serviceWorker\.register\('\./sw\.js(?:\?v=[^']+)?'(?:,\{updateViaCache:'none'\})?\)"
+          pattern = r"if\('serviceWorker'in navigator(?:&&\(location\.protocol==='https:'\|\|location\.hostname==='localhost'\))?\)navigator\.serviceWorker\.register\('\./sw\.js(?:\?v=[^']+)?'(?:,\{updateViaCache:'none'\})?\)"
           replacement = (
               "if('serviceWorker'in navigator&&(location.protocol==='https:'||location.hostname==='localhost'))"
               f"navigator.serviceWorker.register('./sw.js?v={version}',{{updateViaCache:'none'}})"
