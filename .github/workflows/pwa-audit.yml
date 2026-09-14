@@ -45,3 +45,7 @@ jobs:
           test -n "$SW_VERSION"
           grep -Fq "sw.js?v=${SW_VERSION}" index.html
           grep -Fq "updateViaCache:'none'" index.html
+      - name: Validate secure-context service worker registration
+        run: |
+          grep -Fq "location.protocol==='https:'" index.html
+          grep -Fq "location.hostname==='localhost'" index.html
