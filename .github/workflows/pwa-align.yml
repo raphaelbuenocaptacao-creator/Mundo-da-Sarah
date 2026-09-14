@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Align service worker registration with cache version
+      - name: Align secure service worker registration with cache version
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -29,8 +29,12 @@ jobs:
           if not match:
               raise SystemExit('Could not determine service worker version')
           version = match.group(0)
-          pattern = r"navigator\.serviceWorker\.register\('\./sw\.js(?:\?v=[^']+)?'(?:,\{updateViaCache:'none'\})?\)"
-          replacement = f"navigator.serviceWorker.register('./sw.js?v={version}',{{updateViaCache:'none'}})"
+
+          pattern = r"if\('serviceWorker'in navigator\)(?:&&\(location\.protocol==='https:'\|\|location\.hostname==='localhost'\))?navigator\.serviceWorker\.register\('\./sw\.js(?:\?v=[^']+)?'(?:,\{updateViaCache:'none'\})?\)"
+          replacement = (
+              "if('serviceWorker'in navigator&&(location.protocol==='https:'||location.hostname==='localhost'))"
+              f"navigator.serviceWorker.register('./sw.js?v={version}',{{updateViaCache:'none'}})"
+          )
           updated, count = re.subn(pattern, replacement, html, count=1)
           if count != 1:
               raise SystemExit('Could not find service worker registration')
@@ -40,11 +44,11 @@ jobs:
       - name: Commit alignment when needed
         run: |
           if git diff --quiet -- index.html; then
-            echo 'Service worker registration already aligned.'
+            echo 'Service worker registration already aligned and secure.'
             exit 0
           fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add index.html
-          git commit -m 'fix(pwa): align Mundo da Sarah service worker version'
+          git commit -m 'fix(pwa): secure Mundo da Sarah service worker registration'
           git push
