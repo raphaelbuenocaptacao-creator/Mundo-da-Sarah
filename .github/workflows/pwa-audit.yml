@@ -29,6 +29,11 @@ jobs:
           grep -q '192x192' manifest.webmanifest
           grep -q '512x512' manifest.webmanifest
           grep -q 'maskable' manifest.webmanifest
+      - name: Validate mobile install metadata
+        run: |
+          grep -Fq 'name="theme-color"' index.html
+          grep -Fq 'name="mobile-web-app-capable" content="yes"' index.html
+          grep -Fq 'name="apple-mobile-web-app-capable" content="yes"' index.html
       - name: Validate private and range-safe cache policy
         run: |
           grep -q "authorization" sw.js
